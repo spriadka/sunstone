@@ -230,12 +230,25 @@ public final class Config {
          * Configuration keys for Azure ARM nodes. When changing, don't forget to change {@code azure-arm-README.md}.
          */
         public static final class AzureArm {
-            public static final String IMAGE = "azure-arm.image";
             public static final String IMAGE_IS_WINDOWS = "azure-arm.image.isWindows";
             public static final String SIZE = "azure-arm.size";
             public static final String INBOUND_PORTS = "azure-arm.inboundPorts";
             public static final String SSH_USER = "azure-arm.ssh.user";
             public static final String SSH_PASSWORD = "azure-arm.ssh.password";
+            public static final String IMAGE_TYPE = "azure-arm.imageType";
+
+            public static final class Image {
+                public static final String IMAGE = "azure-arm.image.name";
+                public static final String RESOURCE_GROUP = "azure-arm.image.resourceGroup";
+            }
+
+            public static final class VMImage {
+                public static final String LOCATION = "azure-arm.vmimage.location";
+                public static final String PUBLISHER = "azure-arm.vmimage.publisher";
+                public static final String OFFER = "azure-arm.vmimage.offer";
+                public static final String SKU = "azure-arm.vmimage.sku";
+                public static final String VERSION = "azure-arm.vmimage.version";
+            }
         }
 
         /**
