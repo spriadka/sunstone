@@ -44,7 +44,7 @@ List of Azure `CloudProvider` properties:
 | azure-arm.subscriptionId | Azure subscription ID                                           | [None. Mandatory.]                 |
 | azure-arm.tenantId     | Azure tenant ID. Used for OAuth authentication.                   | [None. Mandatory.]                 |
 | azure-arm.applicationId | The application ID of the Azure service principal.               | [None. Mandatory.]                 |
-| azure-arm.password     | Password to the service principal. See `azure.applicationId`.     | [None. Mandatory.]                 |
+| azure-arm.password     | Password to the service principal. See `azure-arm.applicationId`.     | [None. Mandatory.]                 |
 | azure-arm.publishers   | Comma-delimited list of publishers whose marketplace images are recognized. If you want to use a marketplace image, you have to specify its publisher. Please note that listing all images takes a long time (it's only done once, though), so it's not the best idea to add publishers "just in case". | `Canonical,RedHat` |
 
 ### Node
@@ -54,11 +54,19 @@ List of Azure `Node` properties:
 | Property name          | Description                                                       | Default value                      |
 |:-----------------------|:------------------------------------------------------------------|:-----------------------------------|
 | nodegroup              | Name of the node group for this node. Default value should typically be satisfactory. | The `nodegroup` value from the cloud provider. |
-| azure-arm.image        | Reference to the Azure virtual machine image in the format `location/publisher/offer/sku`. Either references a marketplace image (e.g. `eastus/Canonical/UbuntuServer/16.04.0-LTS`) or an image in a blob store under a particular storage account. In the latter case, it looks like `location//#storageAccount/blob`. | [None. Mandatory.] |
+| azure-arm.image        | Reference to the Azure (**classic**) virtual machine image in the format `location/publisher/offer/sku`. Either references a marketplace image (e.g. `eastus/Canonical/UbuntuServer/16.04.0-LTS`) or an image in a blob store under a particular storage account. In the latter case, it looks like `location/#storageAccount/blob`. If you prefer to use custom images (registered at your resource-group), use following format `resource_group/location/image_name` | [None. Mandatory.] |
 | azure-arm.image.isWindows | TODO this is implemented, but I'm not sure if it makes any sense. | `false`                         |
 | azure-arm.bootScript   | Allows you to specify a script that is to be run on boot. The script is run with `sudo`. | [None. Optional.] |
 | azure-arm.bootScript.file | As `azure-arm.bootScript`, but allows you to specify a path to a file that contains the script. Only one of `azure-arm.bootScript` and `azure-arm.bootScript.file` can be specified at a time. | [None. Optional.] |
-| azure-arm.size         | ID of the Azure ARM virtual machine size. Some typical are: `Basic_A[0-4]`, `Standard_A[0-7]`. Note that not all locations have to support all sizes. | Azure-specific default value. |
+| azure-arm.size         | ID of the Azure ARM virtual machine size in the format `location/size_id`. Some typical values for `size_id` are: `Basic_A[0-4]`, `Standard_A[0-7]`. Note that not all locations have to support all sizes. | Azure-specific default value. |
 | azure-arm.inboundPorts | Comma-delimited numbers of TCP ports that should be open.         | 22                                 |
 | azure-arm.ssh.user     | Username of the user that will be created in the virtual machine. Will be later used for SSH. | [None. Mandatory.] |
 | azure-arm.ssh.password | Password of the user that will be created in the virtual machine. Will be later used for SSH. Note that Azure requires passwords to have certain quality; too simple passwords will cause an error. | [None. Mandatory.] |
+
+
+### Miscellaneous
+
+| Property name | Description | Default value |
+|:--------------|:------------|:--------------|
+| jclouds.regions | Sets the location from where it'll be looking for images. Recommended to limit the scope as it will try to build an image list from all of the regions and all of the offers from publisher specified via the `azure-arm.publishers` property. Example value: `northeurope` | JClouds default value |
+| jclouds.compute.timeout.node-running | Timeout for polling the node to be in `running` state. | JClouds specific value
